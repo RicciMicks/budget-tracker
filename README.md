@@ -2,7 +2,7 @@
 This is a Google Sheets project that is useful to easily track and monitor your budget in real time.
 
 ## Links for the file
-Blank Template: (Make a Copy then create your own file)
+Blank Template: (Make a Copy to create your own file)
 
 https://docs.google.com/spreadsheets/d/1DG5FwlgYq-KhKUDiiY1bjjneiYZiAY2Zk5Sd00zzuFU/edit?usp=sharing
 
