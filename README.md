@@ -63,10 +63,93 @@ The following charts are also shown in this dashboard:
 ### Breakdown
 
 This is the tab that shows the breakdown or pivot tables from the dataset to filter specific data. I also used SQL or the Google Visualization API Query Language to make these pivot tables. This include the following tables:
+
 + Daily Budget Breakdown - This shows the income, expenses, savings, and remaining money (running total) for each day. This data is presented in Daily Budget Tracking line chart in "Dashboard" tab.
+
+Query:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT A, SUM(E), SUM(F), SUM(G), SUM(E)-SUM(F)+SUM(G)
+WHERE A IS NOT NULL AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY A
+LABEL SUM(E) '', SUM(F) '', SUM(G) '', SUM(E)-SUM(F)+SUM(G) ''
+"),"(No data)"),"(No data)")
+
+Formula for "Remaining Column":
+> =ARRAYFORMULA(IF(A10:A<>"",sumif(row(A10:A),"<="&row(A10:A),E10:E),))
+
 + Monthly Budget Breakdown - This shows the income and expenses for each month. This data is presented in Monthly Income and Expenses bar chart in "Dashboard" tab.
+
+Query:
+> =IFERROR(IFNA(QUERY('All Transactions'!$A$8:$M,"
+SELECT H, I, J, SUM(E), SUM(F)
+WHERE A IS NOT NULL AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY H, I, J
+ORDER BY H, I
+LABEL H '', I '', J '', SUM(E) '', SUM(F) ''
+"),"(No data)"),"(No data)")
+
 + Total Income - This shows the income for each category, sorted in decreasing order. The first five rows shows the Top 5 categories with highest income, and then the last row for Other Income for other categories not in Top 5. The breakdown for the other categories are shown in the table under.
+
+Query for Top 5 Income:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(E)
+WHERE (C IS NOT NULL AND C <> 'Others') AND A IS NOT NULL AND E <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(E) DESC
+LIMIT 5
+LABEL C '', SUM(E) ''
+"),""),"(No data)")
+
+Query for "Others" Category:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(E)
+WHERE C = 'Others' AND A IS NOT NULL AND E <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(E) DESC
+LABEL C '', SUM(E) ''
+"),""),"")
+
+Query for Income below the Top 5 excluding "Others" category:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(E)
+WHERE (C IS NOT NULL AND C <> 'Others') AND A IS NOT NULL AND E <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(E) DESC
+OFFSET 5
+LABEL C '', SUM(E) ''
+"),""),"")
+
 + Total Expenses - This shows the expenses for each category, sorted in decreasing order. The first five rows shows the Top 5 categories with highest expenses, and then the last row for Other Expenses for other categories not in Top 5. The breakdown for the other categories are shown in the table under.
+
+Query for Top 5 Expenses:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(F)
+WHERE (C IS NOT NULL AND C <> 'Others') AND A IS NOT NULL AND F <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(F) DESC
+LIMIT 5
+LABEL C '', SUM(F) ''
+"),""),"(No data)")
+
+Query for "Others" Category:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(F)
+WHERE C = 'Others' AND A IS NOT NULL AND F <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(F) DESC
+LABEL C '', SUM(F) ''
+"),""),"")
+
+Query for Income below the Top 5 excluding "Others" category:
+> =IFERROR(IFNA(QUERY('All Transactions'!A8:M,"
+SELECT C, SUM(F)
+WHERE (C IS NOT NULL AND C <> 'Others') AND A IS NOT NULL AND F <> 0 AND (K = TRUE AND L = TRUE) AND (M = TRUE OR B IS NULL)
+GROUP BY C
+ORDER BY SUM(F) DESC
+OFFSET 5
+LABEL C '', SUM(F) ''
+"),""),"")
+
 + Periods - This shows the years and months included in the whole dataset. If the year is not filtered, the months will not be shown.
 
 ### Wallets
@@ -102,7 +185,7 @@ var datasheet = ss.getSheetByName("All Transactions");
 var wallet_dropdown = ss.getSheetByName("Wallets");
 var cat_dropdown = ss.getSheetByName("Categories");
 
-//My Transaction
+//My Transaction variables
 var date = form.getRange("date");
 var wallet = form.getRange("wallet_acc");
 var type = form.getRange("type");
@@ -112,12 +195,16 @@ var val = form.getRange("value");
 var remaining_money = form.getRange("remaining_money");
 var button = form.getRange("button_addtrans");
 
-//Transfer Money
+//Transfer Money variables
 var transDate = form.getRange("transDate");
 var transFrom = form.getRange("transFrom");
 var transTo = form.getRange("transTo");
 var transVal = form.getRange("transValue");
 var transBtn = form.getRange("button_transfer");
+
+/*
+Function for recording transactions into the dataset, from "Record Transaction" to "All Transactions."
+*/
 
 function recordValue() {
 
@@ -219,6 +306,10 @@ function recordValue() {
   }
 
 }
+
+/*
+Function for recording the transfers into the dataset, from "Record Transaction" to "All Transactions."
+*/
 
 function recordTransfer(){
 
@@ -323,13 +414,15 @@ function recordTransfer(){
     }
 
     transDate.setFormula("=today()");
-    //transFrom.setValue("");
-    //transTo.setValue("");
     transVal.setValue("");
     
   }
 
 }
+
+/*
+Function for adding dates with no records from the date of previous transaction into the current date.
+*/
 
 function prevTrans(){
 
@@ -361,6 +454,10 @@ function prevTrans(){
     }
   }
 }
+
+/*
+Function for the buttons or checkboxes. If the checkboxes is checked, the function of the button will trigger.
+*/
 
 function onEdit(e){
 
