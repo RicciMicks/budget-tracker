@@ -5,10 +5,8 @@ This is a Google Sheets project that is useful to easily track and monitor your 
 Blank Template:
 
 
-
 File with Sample Data:
-
-https://docs.google.com/spreadsheets/d/e/2PACX-1vQUD-Zdd9dtCKhOWa9-qZB9EfGXCZZL_U6QKF8pTk2sPx8KRxbWJ4SFDV98uipberUwNGUh2gFvGIOn/pubhtml
+https://docs.google.com/spreadsheets/d/1ahlXT31PT1ObryVqxxlAbUd_4uJWXCXv4iCiixS3g_o/edit?usp=sharing
 
 # Description and Tutorial
 
