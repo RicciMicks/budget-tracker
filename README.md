@@ -1,7 +1,7 @@
 # budget-tracker
 This is a Google Sheets project that is useful to easily track and monitor your budget in real time.
 
-# Links for the file
+## Links for the file
 Blank Template: (Make a Copy then create your own file)
 
 https://docs.google.com/spreadsheets/d/1DG5FwlgYq-KhKUDiiY1bjjneiYZiAY2Zk5Sd00zzuFU/edit?usp=sharing
@@ -10,7 +10,7 @@ File with Sample Data:
 
 https://docs.google.com/spreadsheets/d/19lMLMcpTbJ-I65Bf0T1wnrcShYoQ96qTU78W_RAJqb0/edit?usp=sharing
 
-# Description of Tabs and Tutorial
+## Description of Tabs
 ### Record Transaction
 
 This is the tab where you can record all your transactions daily, including your transfer of money from a wallet or account to the other wallet or account. Using Google Apps Script, transactions can be automatically loaded into the dataset in "All Transactions" tab. I put the code in the "Apps Script Code" section. 
@@ -55,23 +55,45 @@ The following scorecards are shown in this dashboard:
 + Remaining
 
 The following charts are also shown in this dashboard:
-+ Income - Shows the pie chart of all your income, sorted by the amount in decreasing order.
-+ Expenses - Shows the pie chart of all your expenses, sorted by the amount in decreasing order.
++ Income - Shows the pie chart of all your income per category. This shows the Top 5 categories with highest income, and the Other Income for other categories not in Top 5.
++ Expenses - Shows the pie chart of all your expenses per category. This shows the Top 5 categories with highest expenses, and the Other Expenses for other categories not in Top 5.
 + Monthly Income and Expenses - Shows the bar chart of the income and expenses per month.
-+ Daily Budget Tracking - Shows your budget in a daily basis to see if your budget is increasing or decreasing.
++ Daily Budget Tracking - Shows the line chart of your budget in a daily basis to see if your budget is increasing or decreasing.
 
 ### Breakdown
 
 This is the tab that shows the breakdown or pivot tables from the dataset to filter specific data. I also used SQL or the Google Visualization API Query Language to make these pivot tables. This include the following tables:
-
++ Daily Budget Breakdown - This shows the income, expenses, savings, and remaining money (running total) for each day. This data is presented in Daily Budget Tracking line chart in "Dashboard" tab.
++ Monthly Budget Breakdown - This shows the income and expenses for each month. This data is presented in Monthly Income and Expenses bar chart in "Dashboard" tab.
++ Total Income - This shows the income for each category, sorted in decreasing order. The first five rows shows the Top 5 categories with highest income, and then the last row for Other Income for other categories not in Top 5. The breakdown for the other categories are shown in the table under.
++ Total Expenses - This shows the expenses for each category, sorted in decreasing order. The first five rows shows the Top 5 categories with highest expenses, and then the last row for Other Expenses for other categories not in Top 5. The breakdown for the other categories are shown in the table under.
++ Periods - This shows the years and months included in the whole dataset. If the year is not filtered, the months will not be shown.
 
 ### Wallets
 
+This is the tab that shows all your wallets or accounts, including their starting salary, which is the money that you have in that wallet as you put this in your database.
+
+In this tab, you can add, edit, and delete wallet or account with their starting salary.
+
+To edit wallet, you can do the following:
+1. Rename your wallet in this tab.
+2. Filter the data in "All Transactions" tab in Wallet column by the wallet you renamed.
+3. Highlight the Wallet column.
+4. Rename the wallet in that column.
 
 ### Categories
 
+This is the tab that shows all categories for Income and all categories for Expenses.
 
-# Apps Script Code
+In this tab, you can add, edit, and delete your categories for Income and Expenses.
+
+To edit category, you can do the following:
+1. Rename your category in this tab.
+2. Filter the data in "All Transactions" tab in Category column by the category you renamed, and the non-zero values of Income in Income column or Expenses in Expenses column.
+3. Highlight the Category column.
+4. Rename the category in that column.
+
+## Apps Script Code
 ```
 //Call Spreadsheet
 var ss = SpreadsheetApp.getActiveSpreadsheet();
