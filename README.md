@@ -1,5 +1,5 @@
 # budget-tracker
-This is a Google Sheets project that is useful to easily track and monitor your budget in real time.
+This is a Google Sheets project that is useful to easily track and monitor your budget in real time, utilizing Google Sheets, Google Apps Script (JavaScript) for automation, and Google Visualization API Query Language (SQL) for the pivot tables.
 
 ## Links for the file
 Blank Template: (Make a Copy to create your own file)
